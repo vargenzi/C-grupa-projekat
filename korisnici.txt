@@ -1,2 +1,6 @@
-milie|killer|Mile|Kitic|muski|administrator
-dafsaf|asfaf|asfaf|faf|muski|kupac
+vargenzi|zoran|Zoran|Repic|musko|administrator
+gile|zoran|Zoran|Repic|musko|kupac
+cile|zoran|Zoran|Repic|musko|kupac
+mile|zoran|KurcinaCrna|Repic|musko|kupac
+pile|malakita|Lilipunac|Repic|musko|banovan
+VelikaKita|nohands|Velikakita1|Velikakita2|muski|kupac
