@@ -7,7 +7,7 @@ def prijava():
     file = open("korisnici.txt", "r")
     for info in file.readlines():
         sadrzaj = info.split('|')
-        korisnici[sadrzaj[0]] = sadrzaj[1:-1]
+        korisnici[sadrzaj[0]] = sadrzaj[1:]
     file.close()
 
     print("Pre pristupa programu morate da se prijavite!")
@@ -29,25 +29,25 @@ def prijava():
                 korisnici[korisnicko_ime] = podaci
                 print("Uspesno ste se prijavili!")
                 file = open("korisnici.txt", "a")
-                file.write("\n" + korisnicko_ime + "|" + podaci_o_korisniku)
+                file.write(korisnicko_ime + "|" + podaci_o_korisniku)
                 file.close()
                 return uloga0
         elif sa_bez_naloga == "1":
             while True:
                 administrator_kupac = input("Unesite vasu ulogu - administrator/kupac >>")
-                if administrator_kupac == "administrator" and administrator_kupac in korisnici[korisnicko_ime]:
+                if administrator_kupac == "administrator" and administrator_kupac in korisnici[korisnicko_ime][4].strip("\n"):
                     while True:
                         admin_lozinka = input("Unesite lozinku >>")
-                        if admin_lozinka in korisnici[korisnicko_ime]:
+                        if admin_lozinka == korisnici[korisnicko_ime][0]:
                             print("Uspesno ste se prijavili kao administrator!")
                             uloga1 = "administrator"
                             return uloga1
                         else:
                             print("Uneli ste pogresnu lozinku! Pokusajte ponovo!")
-                elif administrator_kupac == "kupac" and administrator_kupac in korisnici[korisnicko_ime]:
+                elif administrator_kupac == "kupac" and administrator_kupac == korisnici[korisnicko_ime][4].strip("\n"):
                     while True:
                         kupac_lozinka = input("Unesite lozinku >>")
-                        if kupac_lozinka in korisnici[korisnicko_ime]:
+                        if kupac_lozinka == korisnici[korisnicko_ime][0]:
                             print("Uspesno ste se prijavili kao kupac!")
                             uloga2 = "kupac"
                             return uloga2
@@ -188,6 +188,153 @@ def sortiraj_vozila():
             print(keys, end=" ")
             print(valu)
     """
+def prikaz_kupaca():
+    f = open("korisnici.txt", "r")
+    linije = f.readlines()
+    f.close()
+    for line in linije:
+        sadrzaj = line.split("|")
+        if sadrzaj[5].strip("\n") == "kupac":
+            print("-------------------------------------------")
+            print("Korisnicko ime je >>" + sadrzaj[0])
+            print("Ime je >>" + sadrzaj[2])
+            print("Prezime je >>" + sadrzaj[3])
+            print("Pol je >>" + sadrzaj[4])
+
+def dodavanje_kupca():
+    f = open("korisnici.txt", "r")
+    linije = f.readlines()
+    f.close()
+    for line in linije:
+        sadrzaj = line.split("|")
+        korisnici[sadrzaj[0]] = sadrzaj[1:]
+    f = open("korisnici.txt", "a")
+    while True:
+        korisnicko_ime = input("Unesite korsnicko ime novog kupca:")
+        if korisnicko_ime in korisnici.keys():
+            print("Uneli ste ime koje ne je vec zauzeto")
+        elif korisnicko_ime not in korisnici.keys():
+            lozinka = input("Ueti lozinku novog kupca >>")
+            ime = input("Uneti ime novog kupca >>")
+            prezime = input("Uneti prezime novog kupca >>")
+            pol = input("Uneti pol novog kupca >>")
+            f.write("\n" + korisnicko_ime + "|" + lozinka + "|" + ime + "|" + prezime + "|" + pol + "|" + "kupac")
+            f.close()
+            return "Uspesno dodat kupac"
+
+def meni_izmena():
+    print("1 Promenite ime kupca.")
+    print("2 Promenite prezime kupca.")
+    print("3 Promenite lozinku kupca.")
+    print("4 Upis, zavrsavanje koda.")
+
+def izmeni_kupca():
+    f = open("korisnici.txt", "r")
+    linije = f.readlines()
+    f.close()
+    lista2 = []
+    for line in linije:
+        sadrzaj = line.split("|")
+        korisnici[sadrzaj[0]] = sadrzaj[1:]
+        lista2.append(sadrzaj[0])
+
+    bul = True
+    while bul:
+        meni_izmena()
+        prov = input("Unesite vas izbor >>")
+        if prov == "1":
+            korisnik = input("Unesite korsnicko ime kojeg korsinika zelite da menjate >>")
+            if korisnik not in korisnici.keys():
+                print("Nepostojeci korisnik.")
+            elif korisnik in korisnici.keys() and korisnici[korisnik][4].strip("\n") == "kupac":
+                ime = input("Unesite novo ime >>")
+                korisnici[korisnik][1] = ime
+
+        elif prov == "2":
+            korisnik = input("Unesite korsnicko ime kojeg korsinika zelite da menjate >>")
+            if korisnik not in korisnici.keys():
+                print("Nepostojeci korisnik.")
+            elif korisnik in korisnici.keys() and korisnici[korisnik][4].strip("\n") == "kupac":
+                prezime = input("Unesite novo prezime >>")
+                korisnici[korisnik][2] = prezime
+
+        elif prov == "3":
+            korisnik = input("Unesite korsnicko ime kojeg korsinika zelite da menjate >>")
+            if korisnik not in korisnici.keys():
+                print("Nepostojeci korisnik.")
+            elif korisnik in korisnici.keys() and korisnici[korisnik][4].strip("\n") == "kupac":
+                lozinka = input("Unesite novu lozinku >>")
+                korisnici[korisnik][0] = lozinka
+
+        elif prov == "4":
+            f = open("korisnici.txt", "w")
+            print("Gotovo sa promenama, kraj izvrsavanja koda.")
+            i = 0
+            for item in korisnici:
+                f.write(lista2[i] + "|" + korisnici[lista2[i]][0] + "|" + korisnici[lista2[i]][1] + "|" + korisnici[lista2[i]][2] + "|" + korisnici[lista2[i]][3] + "|" + korisnici[lista2[i]][4])
+                i += 1
+            f.close()
+            bul = False
+        elif prov not in ["1", "2", "3", "4"]:
+            print("uneli ste neponudjenu komadnu. Unesite ponovo.")
+
+
+def meni_brisanje():
+    print("1 Banujte korsinika.")
+    print("x Izadjite iz programa.")
+
+
+
+def briasanje_kupca():
+    f = open("korisnici.txt", "r")
+    linije = f.readlines()
+    f.close()
+    lista2 = []
+    for line in linije:
+        sadrzaj = line.split("|")
+        korisnici[sadrzaj[0]] = sadrzaj[1:]
+        lista2.append(sadrzaj[0])
+    bul = True
+    while bul:
+        meni_brisanje()
+        prov = input("Unesite vas izbor >>")
+        if prov == "1":
+            korisnik = input("Unesite ime korisnika >>")
+            if korisnik in korisnici.keys() and korisnici[korisnik][4].strip("\n"):
+                korisnici[korisnik][4] = "banovan\n"
+            elif korisnik not in korisnici.keys():
+                print("Ovaj korisnik ne postoji u nasoj bazi podataka.")
+        elif prov == "x":
+            bul = False
+            f = open("korisnici.txt", "w")
+            print("Gotovo sa brisanjem.")
+            i = 0
+            for item in korisnici:
+                f.write(lista2[i] + "|" + korisnici[lista2[i]][0] + "|" + korisnici[lista2[i]][1] + "|" + korisnici[lista2[i]][2] + "|" + korisnici[lista2[i]][3] + "|" + korisnici[lista2[i]][4])
+                i+=1
+            f.close()
+        elif prov == ["1", "x"]:
+            print("Uneli ste pogresnu komandu.")
+
+
+def prikaz_svih_vozila():
+    f = open("vozila.txt", "r")
+    linije = f.readlines()
+    for line in linije:
+        sadrzaj = line.split("|")
+        print("-------------------------------------")
+        print(sadrzaj[0] + " je " + sadrzaj[1])
+        print(sadrzaj[2] + " je " + sadrzaj[3])
+        print(sadrzaj[4] + " je " + sadrzaj[5])
+        print(sadrzaj[6] + " je " + sadrzaj[7])
+        print(sadrzaj[8] + " je " + sadrzaj[9])
+        print(sadrzaj[10] + " je " + sadrzaj[11])
+        print(sadrzaj[12] + " je " + sadrzaj[13])
+        print(sadrzaj[14] + " je " + sadrzaj[15])
+
+
+
+
 
 
 def administrator_meni():
@@ -212,15 +359,15 @@ if __name__ == '__main__':
             administrator_meni()
             izbor = input("Izaberite opciju >>")
             if izbor == "1":
-                print()
+                prikaz_kupaca()
             elif izbor == "2":
-                print()
+                dodavanje_kupca()
             elif izbor == "3":
-                print()
+                izmeni_kupca()
             elif izbor == "4":
-                print()
+                briasanje_kupca()
             elif izbor == "5":
-                print()
+                prikaz_svih_vozila()
             elif izbor == "6":
                 print()
             elif izbor == "7":
