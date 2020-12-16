@@ -1,3 +1,3 @@
-pera|perapera123|Petar|Petrovic|muski|administrator|
-jova|jovicjova876|Jovan|Jovic|muski|kupac|
-mika|mikamika678|Milos|Milosevic|muski|kupac|
+pera|perapera123|Petar|Petrovic|muski|administrator
+jova|jovicjova876|Jovan|Jovic|muski|kupac
+mika|mikamika678|Milos|Milosevic|muski|kupac
