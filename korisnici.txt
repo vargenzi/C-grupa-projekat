@@ -1,6 +1,3 @@
-vargenzi|zoran|Zoran|Repic|musko|administrator
-gile|zoran|Zoran|Repic|musko|kupac
-cile|zoran|Zoran|Repic|musko|kupac
-mile|zoran|KurcinaCrna|Repic|musko|kupac
-pile|malakita|Lilipunac|Repic|musko|banovan
-VelikaKita|nohands|Velikakita1|Velikakita2|muski|kupac
+pera|perapera123|Petar|Petrovic|muski|administrator|
+jova|jovicjova876|Jovan|Jovic|muski|kupac|
+mika|mikamika678|Milos|Milosevic|muski|kupac|
