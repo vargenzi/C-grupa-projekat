@@ -1,3 +1,3 @@
-sifra|2530|marka|Renault|boja|plava|broj vrata|4|Opis|Model INTENS, Motor 74 kW (100 KS)|Vrsta goriva|Benzin|cena|14.890|dostupnost|na stanju|
-sifra|4552|marka|Dacia|boja|siva|broj vrata|4|Opis|Model Sandero, Motor 55 kW (75 KS)|Vrsta goriva|Dizel|cena|11.490|dostupnost|nije na stanju|
-sifra|3254|marka|Smart|boja|crna|broj vrata|2|Opis|Model Fortwo, Motor 50 kW (70 KS)|Vrsta goriva|Elektricni pogon|cena|8.552|dostupnost|na stanju|
+sifra|2530|marka|Renault|boja|plava|broj vrata|4|Opis|Model INTENS, Motor 74 kW (100 KS)|Vrsta goriva|Benzin|cena|14.890|dostupnost|na stanju
+sifra|4552|marka|Dacia|boja|siva|broj vrata|4|Opis|Model Sandero, Motor 55 kW (75 KS)|Vrsta goriva|Dizel|cena|11.490|dostupnost|nije na stanju
+sifra|3254|marka|Smart|boja|crna|broj vrata|2|Opis|Model Fortwo, Motor 50 kW (70 KS)|Vrsta goriva|Elektricni pogon|cena|8.552|dostupnost|na stanju
