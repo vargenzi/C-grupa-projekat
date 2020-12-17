@@ -3,13 +3,14 @@ vozila = {}
 podaci_o_kupovini = {}
 vozila_lista = []
 cuvanje_imena = ["1"]
+
+
 def prijava():
     file = open("korisnici.txt", "r")
     for info in file.readlines():
         sadrzaj = info.split('|')
         korisnici[sadrzaj[0]] = sadrzaj[1:]
     file.close()
-
     print("Pre pristupa programu morate da se prijavite!")
     sa_bez_naloga = input("Unesite 1 ako vec imate nalog,a 2 ukoliko se prvi put prijavljujete >>")
     while True:
@@ -49,7 +50,7 @@ def prijava():
                     else:
                         break
                 uloga0 = "kupac"
-                podaci_o_korisniku = lozinka + "|" + ime + "|" + prezime + "|" + pol + "|" + uloga0 + "|"
+                podaci_o_korisniku = lozinka + "|" + ime + "|" + prezime + "|" + pol + "|" + uloga0
                 podaci = podaci_o_korisniku.split('|')
                 korisnici[korisnicko_ime] = podaci
                 print("Uspesno ste se prijavili!")
@@ -60,7 +61,8 @@ def prijava():
         elif sa_bez_naloga == "1":
             while True:
                 administrator_kupac = input("Unesite vasu ulogu - administrator/kupac >>")
-                if administrator_kupac == "administrator" and administrator_kupac in korisnici[korisnicko_ime][4].strip("\n"):
+                if administrator_kupac == "administrator" and administrator_kupac in korisnici[korisnicko_ime][4].strip(
+                        "\n"):
                     while True:
                         admin_lozinka = input("Unesite lozinku >>")
                         if admin_lozinka == korisnici[korisnicko_ime][0]:
@@ -83,18 +85,13 @@ def prijava():
                     print("Uneli ste nepostojecu ili netacnu ulogu! Uloge su administrator ili kupac! Unesite ponovo!")
 
 
-def ucitaj_vozila_u_recnik():
-    file = open("vozila.txt", "r")
-    for automobili in file.readlines():
-        return automobili
-    file.close()
-
-
 def prikazi_dostupna_vozila():
+    ch = 0
     fajl = open("vozila.txt", "r")
     linije = fajl.readlines()
+    print("Dostupna vozila su:")
     for linija in linije:
-        sadrzaj = linija.split("|")
+        sadrzaj = linija.strip('\n').split("|")
         if sadrzaj[15] == "na stanju":
             print("-------------------------------------")
             print(sadrzaj[0] + ": " + sadrzaj[1])
@@ -105,6 +102,9 @@ def prikazi_dostupna_vozila():
             print(sadrzaj[10] + ": " + sadrzaj[11])
             print(sadrzaj[12] + ": " + sadrzaj[13])
             print(sadrzaj[14] + ": " + sadrzaj[15])
+            ch = 1
+    if ch == 0:
+        print("Nema dostupnih vozila.")
 
 
 def meni_za_gosta():
@@ -116,12 +116,12 @@ def meni_za_gosta():
 
 
 def pretraga_vozila():
-    i = 0
     check = 0
     ucitaj_vozila_u_listu()
     print("Dostupni parametri: \n 1. marka \n 2. boja \n 3. opis \n 4. vrsta goriva/pogona ")
     pretraga_po = input("Unesite po kom parametru zelite da pretrazite vozila >>")
     if pretraga_po == "1":
+        i = 0
         marka = input("Unesite marku vozila koju zelite da pretrazite >>")
         while i < len(vozila_lista):
             if marka in vozila_lista[i]["marka"] and vozila_lista[i]["dostupnost"] == "na stanju":
@@ -131,7 +131,9 @@ def pretraga_vozila():
 
         if check == 0:
             print("Trenutno nemamo nijedno vozilo marke koje ste uneli!")
+
     elif pretraga_po == "2":
+        i = 0
         boja = input("Unesite boju vozila koju zelite da pretrazite >>")
         while i < len(vozila_lista):
             if boja in vozila_lista[i]["boja"] and vozila_lista[i]["dostupnost"] == "na stanju":
@@ -142,9 +144,10 @@ def pretraga_vozila():
         if check == 0:
             print("Trenutno nemamo nijedno vozilo boje koje ste uneli!")
     elif pretraga_po == "3":
+        i = 0
         opis = input("Unesite opis vozila koji zelite da pretrazite >>")
         while i < len(vozila_lista):
-            if opis in vozila_lista[i]["opis"] and vozila_lista[i]["dostupnost"] == "na stanju":
+            if opis in vozila_lista[i]["Opis"] and vozila_lista[i]["dostupnost"] == "na stanju":
                 print(vozila_lista[i])
                 check = 1
             i = i + 1
@@ -152,9 +155,10 @@ def pretraga_vozila():
         if check == 0:
             print("Trenutno nemamo nijedno vozilo opisa kojeg ste uneli!")
     elif pretraga_po == "4":
+        i = 0
         pogon = input("Unesite vrstu goriva vozila koju zelite da pretrazite >>")
         while i < len(vozila_lista):
-            if pogon in vozila_lista[i]["Vrsta goriva"] and vozila_lista[i]["dostupnost"] == "na stanju":
+            if pogon in vozila_lista[i]["vrsta goriva"] and vozila_lista[i]["dostupnost"] == "na stanju":
                 print(vozila_lista[i])
                 check = 1
             i = i + 1
@@ -172,7 +176,7 @@ def ucitaj_vozila_u_listu():
         podaci = linija.split('|')
         vozila_lista.append(
             {podaci[0]: podaci[1], podaci[2]: podaci[3], podaci[4]: podaci[5], podaci[6]: podaci[7],
-             podaci[8]: podaci[9], podaci[10]: podaci[11], podaci[12]: podaci[13], podaci[14]: podaci[15]})
+             podaci[8]: podaci[9], podaci[10]: podaci[11], podaci[12]: podaci[13], podaci[14]: podaci[15].strip('\n')})
 
 
 def bubble_sort_rastuce(key, list_od_dicts):
@@ -238,7 +242,7 @@ def sortiraj_vozila():
                                                "Unesite vas izbor >>")
                 if opadajuce_rasuce_izbor == "1":
                     print('Vozila sortirana opadajuce po ceni: \n')
-                    sort_lista = bubble_sort_opadajuce("cena", vozila_lista)
+                    sort_lista = bubble_sort_rastuce("cena", vozila_lista)
                     while element < len(sort_lista):
                         if sort_lista[element]["dostupnost"] == "na stanju":
                             print(sort_lista[element])
@@ -246,7 +250,7 @@ def sortiraj_vozila():
                     break
                 elif opadajuce_rasuce_izbor == "2":
                     print('Vozila sortirana rastuce po ceni: \n')
-                    sort_lista = bubble_sort_rastuce("cena", vozila_lista)
+                    sort_lista = bubble_sort_opadajuce("cena", vozila_lista)
                     while element < len(sort_lista):
                         if sort_lista[element]["dostupnost"] == "na stanju":
                             print(sort_lista[element])
@@ -282,14 +286,39 @@ def dodavanje_kupca():
         korisnici[sadrzaj[0]] = sadrzaj[1:]
     f = open("korisnici.txt", "a")
     while True:
-        korisnicko_ime = input("Unesite korsnicko ime novog kupca:")
+        while True:
+            korisnicko_ime = input("Unesite korsnicko ime novog kupca:")
+            if len(korisnicko_ime) < 1:
+                print("Morate uneti korisnicko ime!!!")
+            else:
+                break
         if korisnicko_ime in korisnici.keys():
             print("Uneli ste ime koje ne je vec zauzeto")
         elif korisnicko_ime not in korisnici.keys():
-            lozinka = input("Ueti lozinku novog kupca >>")
-            ime = input("Uneti ime novog kupca >>")
-            prezime = input("Uneti prezime novog kupca >>")
-            pol = input("Uneti pol novog kupca >>")
+            while True:
+                lozinka = input("Unesite lozinku >>")
+                if len(lozinka) < 1:
+                    print("Morate uneti lozinku!!!")
+                else:
+                    break
+            while True:
+                ime = input("Unesite vase ime >>")
+                if len(ime) < 1:
+                    print("Morate uneti ime!!!")
+                else:
+                    break
+            while True:
+                prezime = input("Unesite vase prezime >>")
+                if len(prezime) < 1:
+                    print("Morate uneti prezime!!!")
+                else:
+                    break
+            while True:
+                pol = input("Unesite pol >>")
+                if len(pol) < 1:
+                    print("Morate uneti pol!!!")
+                else:
+                    break
             f.write("\n" + korisnicko_ime + "|" + lozinka + "|" + ime + "|" + prezime + "|" + pol + "|" + "kupac")
             f.close()
             return "Uspesno dodat kupac"
@@ -321,7 +350,12 @@ def izmeni_kupca():
             if korisnik not in korisnici.keys():
                 print("Nepostojeci korisnik.")
             elif korisnik in korisnici.keys() and korisnici[korisnik][4].strip("\n") == "kupac":
-                ime = input("Unesite novo ime >>")
+                while True:
+                    ime = input("Unesite novo ime >>")
+                    if len(ime) < 1:
+                        print("Morate uneti ime!!!")
+                    else:
+                        break
                 korisnici[korisnik][1] = ime
 
         elif prov == "2":
@@ -329,7 +363,12 @@ def izmeni_kupca():
             if korisnik not in korisnici.keys():
                 print("Nepostojeci korisnik.")
             elif korisnik in korisnici.keys() and korisnici[korisnik][4].strip("\n") == "kupac":
-                prezime = input("Unesite novo prezime >>")
+                while True:
+                    prezime = input("Unesite novo prezime >>")
+                    if len(prezime) < 1:
+                        print("Morate uneti prezime!!!")
+                    else:
+                        break
                 korisnici[korisnik][2] = prezime
 
         elif prov == "3":
@@ -337,7 +376,12 @@ def izmeni_kupca():
             if korisnik not in korisnici.keys():
                 print("Nepostojeci korisnik.")
             elif korisnik in korisnici.keys() and korisnici[korisnik][4].strip("\n") == "kupac":
-                lozinka = input("Unesite novu lozinku >>")
+                while True:
+                    lozinka = input("Unesite novu lozinku >>")
+                    if len(lozinka) < 1:
+                        print("Morate uneti lozinku!!!")
+                    else:
+                        break
                 korisnici[korisnik][0] = lozinka
 
         elif prov == "4":
@@ -373,7 +417,7 @@ def briasanje_kupca():
         meni_brisanje()
         prov = input("Unesite vas izbor >>")
         if prov == "1":
-            korisnik = input("Unesite ime korisnika >>")
+            korisnik = input("Unesite korisnicko ime korisnika >>")
             if korisnik in korisnici.keys() and korisnici[korisnik][4].strip("\n"):
                 korisnici[korisnik][4] = "banovan\n"
             elif korisnik not in korisnici.keys():
@@ -408,39 +452,17 @@ def prikaz_svih_vozila():
         print(sadrzaj[14] + " je " + sadrzaj[15])
 
 
-def prikaz_dostupnih_vozila():
-        f = open("vozila.txt", "r")
-        linije = f.readlines()
-        print("Dostupna vozila su:")
-        for line in linije:
-            sadrzaj = line.split("|")
-            if sadrzaj[15].strip("\n") == "na stanju":
-                print("-------------------------------------")
-                print(sadrzaj[0] + " je " + sadrzaj[1])
-                print(sadrzaj[2] + " je " + sadrzaj[3])
-                print(sadrzaj[4] + " je " + sadrzaj[5])
-                print(sadrzaj[6] + " je " + sadrzaj[7])
-                print(sadrzaj[8] + " je " + sadrzaj[9])
-                print(sadrzaj[10] + " je " + sadrzaj[11])
-                print(sadrzaj[12] + " je " + sadrzaj[13])
-            elif sadrzaj[15].strip("\n") != "na stanju":
-                print("Nema dostupnih vozila.")
-                quit()
-
-
-
-
 def kupovina_vozila():
     f = open("vozila.txt", "r")
-    lala = f.readlines()
+    llinije = f.readlines()
     recnik = {}
     listan = []
     i = 0
     f.close()
-    for item in lala:
+    for item in llinije:
         sadrzaj = item.split("|")
         recnik[sadrzaj[1]] = sadrzaj
-    for item in lala:
+    for item in llinije:
         sadrzaj = item.split("|")
         listan.append(sadrzaj[1])
     while True:
@@ -450,15 +472,17 @@ def kupovina_vozila():
             f = open("vozila.txt", "w")
             for item in listan:
                 if sifra_vozila == listan[i]:
-                    f.write("sifra" + "|" + listan[i] + "|" + "marka" + "|" + recnik[listan[i]][3] + "|" + "boja" + "|" +
-                            recnik[listan[i]][5] + "|" + "broj vrata" + "|" + recnik[listan[i]][7] + "|" + "opis" + "|" +
-                            recnik[listan[i]][9] + "|" + "vrsta goriva" + "|" + recnik[listan[i]][11] + "|" + "cena" + "|" +
-                            recnik[listan[i]][13] + "|" + "dostupnost" + "|" + "nije na stanju" + "\n")
+                    f.write(
+                        "sifra" + "|" + listan[i] + "|" + "marka" + "|" + recnik[listan[i]][3] + "|" + "boja" + "|" +
+                        recnik[listan[i]][5] + "|" + "broj vrata" + "|" + recnik[listan[i]][7] + "|" + "opis" + "|" +
+                        recnik[listan[i]][9] + "|" + "vrsta goriva" + "|" + recnik[listan[i]][11] + "|" + "cena" + "|" +
+                        recnik[listan[i]][13] + "|" + "dostupnost" + "|" + "nije na stanju" + "\n")
                 elif sifra_vozila != listan[i]:
-                    f.write("sifra" + "|" + listan[i] + "|" + "marka" + "|" + recnik[listan[i]][3] + "|" + "boja" + "|" +
-                            recnik[listan[i]][5] + "|" + "broj vrata" + "|" + recnik[listan[i]][7] + "|" + "opis" + "|" +
-                            recnik[listan[i]][9] + "|" + "vrsta goriva" + "|" + recnik[listan[i]][11] + "|" + "cena" + "|" +
-                            recnik[listan[i]][13] + "|" + "dostupnost" + "|" + recnik[listan[i]][15])
+                    f.write(
+                        "sifra" + "|" + listan[i] + "|" + "marka" + "|" + recnik[listan[i]][3] + "|" + "boja" + "|" +
+                        recnik[listan[i]][5] + "|" + "broj vrata" + "|" + recnik[listan[i]][7] + "|" + "opis" + "|" +
+                        recnik[listan[i]][9] + "|" + "vrsta goriva" + "|" + recnik[listan[i]][11] + "|" + "cena" + "|" +
+                        recnik[listan[i]][13] + "|" + "dostupnost" + "|" + recnik[listan[i]][15])
                 i += 1
             print("Uspenso je upisano u file.")
             return sifra_vozila
@@ -484,12 +508,12 @@ def zapisivanje_kupovinu(sifra_vozila, cuvanje_imena):
             sifrak = i + 1
     f.close()
     f = open("kupovina.txt", "a")
-    f.write(str(sifrak) + "|" + cuvanje_imena[0] + "|" + sifricav +"|" + cena + "\n")
+    f.write(str(sifrak) + "|" + cuvanje_imena[0] + "|" + sifricav + "|" + cena + "\n")
     f.close()
 
 
-
 def prikaz_licnih_vozila(sacuvano_ime):
+    x = 0
     f = open("kupovina.txt", "r")
     s = open("vozila.txt", "r")
     linije = f.readlines()
@@ -507,14 +531,107 @@ def prikaz_licnih_vozila(sacuvano_ime):
                     print(sadrzaj2[8] + " je " + sadrzaj2[9])
                     print(sadrzaj2[10] + " je " + sadrzaj2[11])
                     print("-----------------------------------")
+                    x = 1
+    if x == 0:
+        print("Nemate nijedno kupljeno vozilo!")
     f.close()
     s.close()
+
+def dodavanje_novog_vozila():
+    f = open("vozila.txt", "r")
+    recnik5 = {}
+    linije = f.readlines()
+    for item in linije:
+        sadrzaj = item.split("|")
+        recnik5[sadrzaj[1]] = sadrzaj
+    f.close()
+    bul = True
+    while bul:
+        sifra = input("Unesite sifru novog vozila >>")
+        if sifra in recnik5.keys() or sifra == "":
+            print("Uneli ste sifru za koju je vezan neki drugi vec postojeci automobil. Unesite Ponovo.")
+        elif sifra not in recnik5.keys() and sifra != "":
+            print("Sifra novog automobila je: " + sifra)
+            bul = False
+
+    bul = True
+
+
+    while bul:
+        marka = input("Unesite marku automobila >>")
+        if marka == "":
+            print("Unos nije validan, unesite ponovo.")
+        elif marka != "":
+            print("Marka automobila je " + marka)
+            bul = False
+    bul = True
+
+    while bul:
+        boja = input("Unesite boju automobila >>")
+        if boja == "":
+            print("Unos nije validan, unesite ponovo.")
+        elif boja != "":
+            print("Boja automobila je " + boja)
+            bul = False
+    bul = True
+
+
+    while bul:
+        broj_vrata = input("Unesite broj_vrata automobila >>")
+        if broj_vrata == "":
+            print("Unos nije validan, unesite ponovo.")
+        elif broj_vrata != "":
+            print("Marka automobila je " + broj_vrata)
+            bul = False
+    bul = True
+
+
+    while bul:
+        cena = input("Unesite cenu automobila >>")
+        if cena == "":
+            print("Unos nije validan, unesite ponovo.")
+        elif cena != "":
+            print("Marka automobila je " + cena)
+            bul = False
+
+    bul = True
+
+    while bul:
+        opis = input("Unesite opis automobila >>")
+        if opis == "":
+            print("Unos nije validan, unesite ponovo.")
+        elif opis != "":
+            print("Opic automobila glasi " + opis)
+            bul = False
+    bul = True
+
+    while bul:
+        vrsta_goriva = input("Unesite vrstu goriva automobila >>")
+        if vrsta_goriva == "":
+            print("Unos nije validan, unesite ponovo.")
+        elif vrsta_goriva != "":
+            print("Marka automobila je " + vrsta_goriva)
+            bul = False
+    f = open("vozila.txt", "a")
+    f.write("sifra" + "|" + sifra + "|" + "marka" + "|" + marka
+            + "|" + "boja"  + "|" + boja + "|" + "broj vrata" + "|"
+            + broj_vrata + "|" + "opis"+ "|" + opis + "|" + "vrsta goriva" + "|" + vrsta_goriva + "|"
+            + "cena" + "|" + cena + "|" + "dostupnost" + "|" + "na stanju\n")
+    f.close()
+
+def izmeni_posotjece_vozilo():
+    f = open("vozila.txt", "r")
+    linije = f.readlines()
+    f.close()
+    recnik1 = {}
+    for item in linije:
+        sadrzaj = item.split("|")
+        recnik1[sadrzaj[1]] = sadrzaj
 
 
 
 
 def administrator_meni():
-
     print("***************************Meni***************************")
     print("1. Prikazi sve kupce")
     print("2. Dodaj kupca")
@@ -525,12 +642,14 @@ def administrator_meni():
     print("7. Izmeni postojece vozilo")
     print("x  Izlaz")
 
+
 def kupac_meni():
     print("***************************Meni***************************")
     print("1. Prikazi sva dostupna vozila")
     print("2. Prikazi moja vozila")
     print("3. Kupi vozilo")
     print("x Izlaz")
+
 
 if __name__ == '__main__':
     print("******Dobrodosli u aplikaciju prodavnice vozila!******")
@@ -553,7 +672,7 @@ if __name__ == '__main__':
                 elif izbor == "5":
                     prikaz_svih_vozila()
                 elif izbor == "6":
-                    print()
+                    dodavanje_novog_vozila()
                 elif izbor == "7":
                     print()
                 elif izbor == "x":
@@ -565,9 +684,11 @@ if __name__ == '__main__':
                 kupac_meni()
                 izbor = input("Izaberite opciju >>")
                 if izbor == "1":
-                    prikaz_dostupnih_vozila()
+                    prikazi_dostupna_vozila()
                 if izbor == "2":
                     prikaz_licnih_vozila(cuvanje_imena)
+                if bul == False:
+                    print("Mozete kupiti samo jedno vozilo!")
                 if izbor == "3" and bul == True:
                     sifra = kupovina_vozila()
                     zapisivanje_kupovinu(sifra, cuvanje_imena)
@@ -577,14 +698,13 @@ if __name__ == '__main__':
 
     elif prijavi_se == "2":
         print("Aplikaciji pristupate kao gost!")
-        while True:
-            meni_za_gosta()
-            izbor = input("Izaberite opciju >>")
-            if izbor == "1":
-                prikazi_dostupna_vozila()
-            elif izbor == "2":
-                pretraga_vozila()
-            elif izbor == "3":
-                sortiraj_vozila()
-            elif izbor == "x":
-                quit()
+        meni_za_gosta()
+        izbor = input("Izaberite opciju >>")
+        if izbor == "1":
+            prikazi_dostupna_vozila()
+        elif izbor == "2":
+            pretraga_vozila()
+        elif izbor == "3":
+            sortiraj_vozila()
+        elif izbor == "x":
+            quit()
